@@ -19,12 +19,10 @@ The result is a world that **adapts to how you actually play it**, while staying
 | | Static one-shot PCG (PCGRL, Moonshine, ...) | **ScrollWeaver (this work)** |
 |---|---|---|
 | When is content generated? | Before play | During play, area by area |
-| What conditions the output? | Designer spec only | Designer spec **+ player trajectory so far** |
+| What conditions the output? | Designer spec only | Designer spec **+ player trajectory** |
 | Adaptation to play style | None | Built in |
-| Global coherence | Trivial (whole map at once) | Enforced by an explicit coherence module |
-| Authoring loop | Open loop | Closed loop with the player |
 
-This makes the problem closer to how human designers actually work in tools like Spelunky's level editor or Dwarf Fortress — and closer to how game worlds will need to be generated in the era of long-horizon, agent-driven play.
+This makes the problem closer to how game worlds will need to be generated in the era of long-horizon, agent-driven play.
 
 ## Method (sketch)
 
@@ -35,7 +33,7 @@ ScrollWeaver decomposes generation into a sequence of local authoring decisions:
 3. **Regional generator** — proposes the next area conditioned on both encoders' outputs.
 4. **Coherence module** — guarantees the proposed area is consistent with previously committed geometry, items, and narrative state.
 
-A full system diagram is on the [project page](https://scrollweaver.sunhaoxuan.org).
+A full system diagram will be on the [project page](https://scrollweaver.sunhaoxuan.org).
 
 ## Repository layout
 
@@ -63,15 +61,6 @@ This repo follows a 14-week development plan. Current phase is marked **▶**.
 
 ## Getting started
 
-> Setup instructions will be finalized once Phase 1 reproductions land. Tentative:
-
-```bash
-git clone https://github.com/guwangtu/scrollweaver.git
-cd scrollweaver
-pip install -r requirements.txt
-python scripts/train.py --config configs/baseline_pcgrl.yaml
-```
-
 ## Related work
 
 - **PCGRL** (Khalifa et al., 2020) — RL for level generation; ScrollWeaver uses a related action formulation but at the *region* level and conditioned on player traces.
@@ -79,28 +68,12 @@ python scripts/train.py --config configs/baseline_pcgrl.yaml
 - **DIAMOND** (Alonso et al., ICLR 2025) — diffusion world models for RL; we draw on its world-model machinery for the coherence module.
 - **Path of Destruction** (Siper, Earle, Togelius) — autoregressive content generation; the closest conceptual neighbor to ScrollWeaver's per-region authoring loop.
 
-A full reading list lives in [`docs/related_work.md`](docs/related_work.md) (TODO).
-
-## Citing
-
-If ScrollWeaver is useful to your work, please cite:
-
-```bibtex
-@misc{sun2026scrollweaver,
-  title  = {ScrollWeaver: Online Sequential Authoring of Game Worlds from Player Trajectories},
-  author = {Sun, Haoxuan},
-  year   = {2026},
-  note   = {Work in progress},
-  url    = {https://scrollweaver.sunhaoxuan.org}
-}
-```
 
 ## Author
 
 **Haoxuan Sun** — M.S. in Computer Science, Vanderbilt University
-Advised by [Prof. Soheil Kolouri](https://skolouri.github.io/) (MINT Lab)
 [Homepage](https://sunhaoxuan.org) · [GitHub](https://github.com/guwangtu)
 
 ## License
 
-TBD (likely MIT). Until a `LICENSE` file is added, all rights reserved.
+MIT License
