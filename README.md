@@ -26,12 +26,26 @@ This makes the problem closer to how game worlds will need to be generated in th
 
 ## Method (sketch)
 
-ScrollWeaver decomposes generation into a sequence of local authoring decisions:
+## Room Generation: Generate-then-Edit
+ 
+Each room is produced in two stages:
+ 
+1. **Background generation.** While the player explores Room *n*, the system uses the previous trajectory (trace₀) to generate a full draft of Room *n+1*. The cost of generation is hidden behind gameplay time.
+ 
+2. **Transition-time edit.** When the player exits Room *n*, a lightweight editor applies bounded modifications to the draft using trace₁ (the player's most recent behavior), keeping the final room up-to-date without blocking gameplay.
+ 
+Since the edited room has never been seen by the player, there is no risk of modifying already-observed content.
 
-1. **Trajectory encoder** — compresses the player's recent behavior into a fixed-size context vector.
-2. **Constraint encoder** — encodes the designer's high-level intent (difficulty curve, themes, beats).
-3. **Regional generator** — proposes the next area conditioned on both encoders' outputs.
-4. **Coherence module** — guarantees the proposed area is consistent with previously committed geometry, items, and narrative state.
+
+## Architecture
+ 
+**World Model (V / D).** V encodes a room's full structured state (tiles, entities, player position) into discrete latents from a god's-eye view — it serves the generator/editor, not the agent. In this section, we can use self-generated maps and agents operating in preset modes to collect data for training.
+ 
+**Trajectory Representation.** A single latent history [z₀, z₁, ..., zₜ] where each zᵢ is a global snapshot. Player behavior is implicit in each snapshot; trace₀/trace₁ are slices of this sequence, pooled via a small transformer for conditioning.
+ 
+**Transition Model (M).** A transformer world model using Block Teacher Forcing and Dyna with Warmup, serving double duty as both transition predictor and trajectory encoder.
+
+
 
 A full system diagram will be on the [project page](https://scrollweaver.sunhaoxuan.org).
 
