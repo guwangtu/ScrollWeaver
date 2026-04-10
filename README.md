@@ -4,7 +4,7 @@
 
 [Project page](https://scrollweaver.sunhaoxuan.org) · [Paper (coming soon)]() · [Demo (coming soon)]()
 
-> ⚠️ **Status: active early-stage research.** Code, results, and documentation are evolving rapidly. Expect breaking changes.
+> **Work in progress**Everything here is subject to change.
 
 ---
 
@@ -45,7 +45,9 @@ Since the edited room has never been seen by the player, there is no risk of mod
  
 **Transition Model (M).** A transformer world model using Block Teacher Forcing and Dyna with Warmup, serving double duty as both transition predictor and trajectory encoder.
 
+**Generator.** Produces a full room draft from scratch, conditioned on trace₀ and designer constraints (pacing, difficulty). Runs in the background during gameplay.
 
+**Editor.** Applies bounded modifications to the draft at room transition, conditioned on trace₁. Edit budget is capped to keep latency minimal.
 
 A full system diagram will be on the [project page](https://scrollweaver.sunhaoxuan.org).
 
@@ -63,15 +65,24 @@ scrollweaver/
 ```
 
 ## Roadmap
-
-This repo follows a 14-week development plan. Current phase is marked **▶**.
-
-- **▶ Phase 1 — Foundations (weeks 1–5)**
-  Reproduce PCGRL and DIAMOND (ICLR 2025) as baselines and sanity checks.
-- **Phase 2 — Online authoring system (weeks 6–11)**
-  Build the trajectory-conditioned regional generator and coherence module in a pygame roguelike testbed.
-- **Phase 3 — Demo & writeup (weeks 12–14)**
-  Gradio demo, technical report, target submission to IEEE Conference on Games or an AAAI/NeurIPS workshop.
+ 
+**Phase 1 — Environment & Foundations** (Apr–May 2026)
+- Custom Pygame roguelike environment with Gymnasium wrapper
+- PCGRL-JAX reproduction as baseline
+- Collect 10k episodes via hand-crafted policy
+- World model V/D: field-wise tokenizer + discrete latent encoder, sanity-check reconstruction
+ 
+**Phase 2 — Core Pipeline** (Jun–Jul 2026)
+- Transition model M (transformer, Block Teacher Forcing + Dyna with Warmup)
+- Generator + Editor with trajectory conditioning via latent slicing (trace₀ / trace₁)
+- End-to-end generate-then-edit loop: background generation + transition-time edit
+- Three-way comparison: unconditional / static condition / trajectory-conditioned
+- Evaluation: playability, boundary continuity, style coherence; surrogate RL agents as experiential proxy
+ 
+**Phase 3 — Demo & Report** (Aug 2026)
+- Interactive Gradio demo (player-controlled roguelike with live ScrollWeaver generation)
+- Technical report (arXiv-style, 8–12 pages)
+- Project page, 1-min video, public repo with reproduction instructions
 
 ## Getting started
 
